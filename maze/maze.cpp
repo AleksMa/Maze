@@ -17,6 +17,10 @@ bool is_exit(int H, int W, int i, int j, const vector<string> &maze) {
   return (i == 0 || i == H - 1 || j == 0 || j == W - 1) && maze[i][j] == ' ';
 }
 
+int amount(int i, int j, const vector<string> &maze){
+  return maze[i][j] == '.' ? 2 : 1;
+}
+
 int main() {
 
   vector<string> maze;
@@ -49,19 +53,19 @@ int main() {
       break;
     }
     if (cur.y + 1 < H && maze[cur.y + 1][cur.x] != '#' && routes[cur.y + 1][cur.x] > routes[cur.y][cur.x] + 1) {
-      routes[cur.y + 1][cur.x] = routes[cur.y][cur.x] + 1;
+      routes[cur.y + 1][cur.x] = routes[cur.y][cur.x] + amount(cur.y, cur.x, maze);
       Q.push(point(cur.x, cur.y + 1));
     }
     if (cur.x + 1 < W && maze[cur.y][cur.x + 1] != '#' && routes[cur.y][cur.x + 1] > routes[cur.y][cur.x] + 1) {
-      routes[cur.y][cur.x  + 1] = routes[cur.y][cur.x] + 1;
+      routes[cur.y][cur.x  + 1] = routes[cur.y][cur.x] + amount(cur.y, cur.x, maze);;
       Q.push(point(cur.x  + 1, cur.y));
     }
     if (cur.y - 1 >= 0 && maze[cur.y - 1][cur.x] != '#' && routes[cur.y - 1][cur.x] > routes[cur.y][cur.x] + 1) {
-      routes[cur.y - 1][cur.x] = routes[cur.y][cur.x] + 1;
+      routes[cur.y - 1][cur.x] = routes[cur.y][cur.x] + amount(cur.y, cur.x, maze);;
       Q.push(point(cur.x, cur.y - 1));
     }
     if (cur.x - 1 >= 0 && maze[cur.y][cur.x - 1] != '#' && routes[cur.y][cur.x - 1] > routes[cur.y][cur.x] + 1) {
-      routes[cur.y][cur.x - 1] = routes[cur.y][cur.x] + 1;
+      routes[cur.y][cur.x - 1] = routes[cur.y][cur.x] + amount(cur.y, cur.x, maze);;
       Q.push(point(cur.x - 1, cur.y));
     }
   }
@@ -71,16 +75,16 @@ int main() {
   t.y = exit.y;
 
   while(true){
-    if(t.x > 0 && routes[t.y][t.x - 1] == routes[t.y][t.x] - 1){
+    if(t.x > 0 && routes[t.y][t.x - 1] < routes[t.y][t.x]){
       maze[t.y][t.x--] = '*';
     }
-    else if(t.y > 0 && routes[t.y - 1][t.x] == routes[t.y][t.x] - 1){
+    else if(t.y > 0 && routes[t.y - 1][t.x] < routes[t.y][t.x]){
       maze[t.y--][t.x] = '*';
     }
-    else if(t.x < W - 1 && routes[t.y][t.x + 1] == routes[t.y][t.x] - 1){
+    else if(t.x < W - 1 && routes[t.y][t.x + 1] < routes[t.y][t.x]){
       maze[t.y][t.x++] = '*';
     }
-    else if(t.y < H - 1 && routes[t.y + 1][t.x] == routes[t.y][t.x] - 1){
+    else if(t.y < H - 1 && routes[t.y + 1][t.x] < routes[t.y][t.x]){
       maze[t.y++][t.x] = '*';
     }
     if(t.x == start.x && t.y == start.y)
