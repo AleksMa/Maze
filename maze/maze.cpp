@@ -80,8 +80,7 @@ int main() {
   point start, exit;
 
   string temp;
-  for (int i = 0; i < 10; i++) {
-    //while (cin) {
+  while (cin) {
     std::getline(cin, temp);
     int start_pos = temp.find('s');
     if (start_pos != -1)
@@ -143,7 +142,9 @@ int main() {
   }
 
   for (int i = 0; i < maze.size(); i++) {
-    cout << maze[i] << endl;
+    cout << maze[i];
+    if (i < maze.size() - 1)
+      cout << endl;
   }
 
   return 0;
